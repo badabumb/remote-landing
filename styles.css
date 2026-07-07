@@ -797,16 +797,18 @@ main > section,
 
   .pricing__card {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 40px;
   }
 
   .for__cards { grid-template-columns: 1fr 1fr; }
 
-  /* decor scaled for tablet */
+  /* Tablet decor: bright + sharp pink shapes, tucked into the empty top-right
+     and bottom-left corners (bled off-screen so they never sit behind text) */
   .blob--money { width: 2600px; height: 2400px; left: -1500px; }
-  .topo--1 { width: 520px; left: 480px; }
-  .topo--2 { width: 760px; left: -260px; }
+  .topo { opacity: 0.55; filter: blur(0.5px) drop-shadow(0 0 30px rgba(255, 79, 216, 0.55)); }
+  .topo--1 { width: 440px; top: 150px; right: -180px; left: auto; bottom: auto; }
+  .topo--2 { width: 680px; bottom: -190px; left: -320px; top: auto; right: auto; }
 
   .step { max-width: 100%; }
   .step__num { font-size: 72px; min-width: 90px; }
@@ -947,10 +949,11 @@ main > section,
   .blob--mid    { width: 620px;  height: 460px;  top: 1700px; left: -80px; }
   .blob--money  { width: 760px;  height: 1400px; top: 2400px; left: -160px; }
   .blob--bottom { width: 760px;  height: 640px;  top: 4400px; left: -200px; }
-  /* pink waves kept subtle on mobile (visible but never under text) */
-  .topo { opacity: 0.18; filter: blur(3px) drop-shadow(0 0 18px rgba(255, 79, 216, 0.3)); }
-  .topo--1 { width: 220px; top: -30px; left: auto; right: -120px; }
-  .topo--2 { width: 320px; top: 5600px; left: -190px; }
+  /* Mobile decor: bright + sharp pink shapes bled into the empty top-right and
+     bottom-left corners of the page, so they never sit behind body text */
+  .topo { opacity: 0.5; filter: blur(0.5px) drop-shadow(0 0 24px rgba(255, 79, 216, 0.5)); }
+  .topo--1 { width: 300px; top: -140px; right: -150px; left: auto; bottom: auto; }
+  .topo--2 { width: 360px; bottom: -120px; left: -170px; top: auto; right: auto; }
 }
 
 /* Extra-small phones (<= 390px) */

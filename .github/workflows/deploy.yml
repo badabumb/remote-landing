@@ -1,0 +1,52 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download repository
+        uses: actions/checkout@v4
+
+      - name: Configure SSH
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/landing_deploy
+          chmod 600 ~/.ssh/landing_deploy
+
+          ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Deploy website
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          rsync -az --delete \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='.DS_Store' \
+            -e "ssh -i ~/.ssh/landing_deploy" \
+            ./ "$VPS_USER@$VPS_HOST:/var/www/remote-landing/"
+
+      - name: Check deployed website
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+        run: |
+          curl --fail --retry 5 --retry-delay 2 "http://$VPS_HOST/"
